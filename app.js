@@ -14,7 +14,7 @@ const { adminAuth } = require("./api/middleware/check-auth");
 require("dotenv").config();
 
 mongoose.connect(
-  process.env.MONGO_URL_LOCAL,
+  process.env.NGO_URL_HOSTED,
   { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.connection.on("connected", () => {
