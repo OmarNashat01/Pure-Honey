@@ -12,6 +12,7 @@ const storage = multer.diskStorage({
   },
 });
 
+
 const fileVaildator = (req, file, callback) => {
   //validates files before sending them to check
   //if they are pngs or jpegs
