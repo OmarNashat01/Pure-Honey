@@ -4,7 +4,7 @@ const offerSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name: { type: String, required: true },
     price: { type: Number, required: true },
-   offerImage: [{ type: String }],
+    productImage: [{ type: String }],
     description: {type: String},
     category: { type: String, required: false },
     cat: { type: String}

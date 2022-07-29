@@ -34,7 +34,7 @@ const offersController = require('../controllers/offers');
 
 router.get('/',offersController.getAlloffers);
 
-router.post('/', auths.adminAuth,upload.array('offerImage'), offersController.createOneoffer);
+router.post('/', auths.adminAuth,upload.array('productImage'), offersController.createOneoffer);
 
 router.get('/:offerId', offersController.getOneoffer);
 
