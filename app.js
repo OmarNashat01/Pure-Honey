@@ -3,6 +3,8 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
+var cors = require('cors') 
+app.use(cors())
 const port = process.env.PORT || 3000;
 const productRoutes = require("./api/routes/products");
 const offerRoutes = require("./api/routes/offers");
