@@ -191,7 +191,7 @@ console.log('174')
         price: req.body.price,
         category: req.body.category,
         description: req.body.description,
-        offerImage: urls
+        productImage: urls
     });
     console.log("🚀 ~ file: offers.js ~ line 193 ~ createoffers ~ res", res)
     return res
