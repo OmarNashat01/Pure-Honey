@@ -113,7 +113,7 @@ exports.getOneoffer = (req, res, next) => {
     const id = req.params.offerId;
     offers
         .findById(id)
-        .select('_id name price offerImage category')
+        .select('_id name price offerImage category description')
         //.exec()
         .then(offers => {
         console.log("🚀 ~ file: offers.js ~ line 119 ~ offers", offers)
