@@ -4,10 +4,6 @@ const path = require("path");
 const storage = multer.diskStorage({
   //specifies how files are going to be stored
   //on local storage
-  destination: (req, file, callback) => {
-    //specifies destination
-    callback(null, path.join(__dirname, "../uploads"));
-  },
   filename: (req, file, callback) => {
     //specifies how files are going to be named when uploaded
     //* the date is concatenated to the orginal

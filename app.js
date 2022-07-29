@@ -77,13 +77,13 @@ app.use("/api/uploads*", (req, res, next) => {
   }
 });
 
-app.use("/*", (req, res, next) => {
+/* app.use("/*", (req, res, next) => {
   try {
     res.sendFile(__dirname + "/public/index.html");
   } catch (error) {
     next();
   }
-});
+}); */
 
 // Handle Error Requests
 app.use((req, res, next) => {
