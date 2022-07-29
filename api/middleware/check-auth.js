@@ -3,10 +3,19 @@ const jwt = require('jsonwebtoken');
 const auths = {};
 
 auths.userAuth = (req, res, next) => {
-
-    try {
-        if (req.headers.authorization) {
-            const token = req.headers.authorization.split(" ")[1];
+ 
+    var token
+    try {  
+          console.log("🚀 ~ file: check-auth.js ~ line 14 ~ req.session.token", req.session.token)
+        if(req.headers.authorization ||req.session.token){
+          if (req.headers.authorization) {
+            token = req.headers.authorization.split(" ")[1];
+           }
+          else if(req.session.token){
+        
+            token=req.session.token
+           }
+          
             if (token) {
                 const decodedToken = jwt.verify(token, process.env.JWT_KEY);
                 req.userData = decodedToken;
@@ -24,8 +33,15 @@ auths.userAuth = (req, res, next) => {
 
 auths.adminAuth = (req, res, next) => {
     try {
-        if (req.headers.authorization) {
-            const token = req.headers.authorization.split(" ")[1];
+        console.log("🚀 ~ file: check-auth.js ~ line 14 ~ req.session.token", req.session)
+        if(req.headers.authorization ||req.session.token){
+          if (req.headers.authorization) {
+            token = req.headers.authorization.split(" ")[1];
+           }
+          else if(req.session.token){
+        
+            token=req.session.token
+           }
             if (token) {
                 const decodedToken = jwt.verify(token, process.env.JWT_KEY);
                 req.userData = decodedToken;

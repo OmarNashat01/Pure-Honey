@@ -118,7 +118,7 @@ exports.getOneProduct = (req, res, next) => {
     const id = req.params.productId;
     Product
         .findById(id)
-        .select('_id name price productImage category')
+        .select('_id name price productImage category description')
         .populate('cat')
         .exec()
         .then(product => {
@@ -182,10 +182,13 @@ const createProduct = async (req)=> {
         const path = file.path;
         const newPath = await cloudinary.uploader.upload(path);
         const newUrl = newPath.secure_url ;
+        console.log("🚀 ~ file: products.js ~ line 185 ~ createProduct ~ newUrl", newUrl)
+        
         urls.push(newUrl);
         //fs.unlinkSync(path);
     }
-
+    console.log("🚀 ~ file: products.js ~ line 178 ~ createProduct ~ urls", urls)
+   
     //===========================================================
     let res = await Product.create({
         _id: new mongoose.Types.ObjectId(),

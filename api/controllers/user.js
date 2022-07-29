@@ -133,9 +133,11 @@ exports.logIn = (req, res, next) => {
                         expiresIn: "168h"
                     }
                 );
+                req.session.token=token
                 return res.status(200).json({
                     message: 'Auth Successful!',
-                    token: token
+                    token: token,
+                    userType
                 });
             }
             const error = new Error();

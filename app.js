@@ -2,9 +2,12 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const session = require("express-session");
+const mongostore = require("connect-mongodb-session")(session);
 const app = express();
-var cors = require('cors') 
-app.use(cors())
+var cors = require("cors");
+app.use(cors());
+
 const port = process.env.PORT || 3000;
 const productRoutes = require("./api/routes/products");
 const offerRoutes = require("./api/routes/offers");
@@ -15,15 +18,17 @@ const { summary } = require("./api/controllers/orders");
 const { adminAuth } = require("./api/middleware/check-auth");
 require("dotenv").config();
 
-mongoose.connect(
-  process.env.NGO_URL_HOSTED,
- );
+mongoose.connect(process.env.NGO_URL_HOSTED);
 
 mongoose.connection.on("connected", () => {
   console.log("mongodb connection established successfully");
 });
 mongoose.connection.on("error", () => {
   console.log("mongodb connection Failed");
+});
+const store = new mongostore({
+  uri: process.env.NGO_URL_HOSTED,
+  collection: "session",
 });
 // Log request data
 app.use(morgan("dev"));
@@ -35,7 +40,14 @@ app.use("/", express.static("public"));
 // Use body parser middleware to parse body of incoming requests
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use(
+  session({
+    secret: process.env.JWT_KEY,
+    resave: false,
+    saveUninitialized: false,
+    store
+  })
+);
 // Setup CORS
 /* app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
