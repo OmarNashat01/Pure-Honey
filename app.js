@@ -41,6 +41,21 @@ app.use("/uploads", express.static("uploads"));
 app.use("/", express.static("public"));
 
 
+
+app.use(cors(
+  {
+    origin: ['http://localhost:3000'],
+    credentials: true,
+    methods:["GET","POST","DELETE","PATCH"]
+  }
+));
+// Use body parser middleware to parse body of incoming requests
+app.use(bodyParser.json());
+app.use(
+bodyParser.urlencoded({
+extended: true
+})
+);
 app.use(
   session({
     name:"session",
@@ -49,31 +64,13 @@ app.use(
     saveUninitialized: false,
     store,
     cookie:{
-      //secure:true,
-      secure: true,
-      httpOnly: true,
-      sameSite: 'lax'
+    
     }
   })
 );
-
-// Use body parser middleware to parse body of incoming requests
-app.use(bodyParser.json());
-app.use(
-bodyParser.urlencoded({
-extended: false
-})
-);
- 
 app.use(cookieParser());
 
-app.use(cors(
-  {
-    origin: 'http://localhost:3000',
-    credentials: true,
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  }
-));
+
 
 app.use(function(req, res, next) {
   var origin = req.get('origin');
