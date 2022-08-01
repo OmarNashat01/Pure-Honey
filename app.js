@@ -44,7 +44,7 @@ app.use(express.json());
 
 
 app.use(cors()
-));
+);
 //app.use(cookieParser());
 
 // Use body parser middleware to parse body of incoming requests
