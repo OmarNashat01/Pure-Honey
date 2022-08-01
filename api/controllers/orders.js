@@ -138,7 +138,7 @@ exports.pay = async (req, res2, next) => {
 
   //console.log("first")
 
-    //let totalAmount = req.body.totalAmount||4555;
+    let totalAmount = req.body.totalAmount;
 
       let firstName = req.body.firstName;
     let lastName = req.body.lastName;
@@ -194,7 +194,7 @@ exports.pay = async (req, res2, next) => {
         } 
        // return res2.send("i")
           axios.post('https://accept.paymob.com/api/auth/tokens',apiT ).then((res)=>{
-              const totalAmount=4555
+       
               
               const amount_cents = (50+totalAmount)*100;
               const items = [{
@@ -341,7 +341,6 @@ let PreOrder =new preOrder({
         product:req.body.products,
         user: req.body.userData.userId,
         totalAmount:req.body.totalAmount,
-        totalQuantity:req.body.totalQuantity,
         orderNumber,
         firstName,
         lastName,
