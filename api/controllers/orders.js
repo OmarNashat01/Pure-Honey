@@ -288,19 +288,11 @@ exports.pay = async (req, res2, next) => {
 })}
 
 
-exports.callback = async(req, res, next) => {
 
-
- //const preorder =  createpreOrder(req)
-
-
-
-
-}
 exports.callback = async(req, res, next) => {
     try{
            // console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", res.body)
-      const preorder=await preOrder.findOne({orderNumber:res.query.order})
+/*       const preorder=await preOrder.findOne({orderNumber:res.query.order})
       if(!order){
         throw Error("no oders")
       }
@@ -314,7 +306,7 @@ exports.callback = async(req, res, next) => {
         paymentMethod:preorder.paymentMethod,
         orderNumber:preorder.orderNumber
     })
-    await order.save() 
+    await order.save()  */
 
      res.redirect(301,`http://localhost:3000/`);
     }catch (err){
