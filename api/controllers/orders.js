@@ -253,8 +253,7 @@ exports.pay = async (req, res2, next) => {
                           console.log(res5.data)
                   //  return res2.send("fuck frist req")
                     console.log(res5.data.token)
-                    let PreOrder =new preOrder({
-                        _id: mongoose.Types.ObjectId(),
+/*                     let PreOrder =new preOrder({
                         product:req.body.products,
                         user: req.body.userData.userId,
                         totalAmount:req.body.totalAmount,
@@ -262,9 +261,11 @@ exports.pay = async (req, res2, next) => {
                         firstName:req.body.fristName,
                         address:req.body.address
                     });
+                    const preorder= await PreOrder.save() */
+                   // console.log("🚀 ~ file: orders.js ~ line 264 ~ axios.post ~ PreOrder", PreOrder)
                     return res2.send({token:res5.data.token,orderNumber})
 
-                  const preorder= await PreOrder.save()
+                
                         createpreOrder(req, firstName, address,orderNumber).then(()=>{
                             return res2.send({token:res5.data.token}) 
                             //res2.redirect(301, `http://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`)
