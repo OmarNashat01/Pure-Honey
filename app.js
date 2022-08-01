@@ -29,16 +29,16 @@ mongoose.connection.on("connected", () => {
 mongoose.connection.on("error", () => {
   console.log("mongodb connection Failed");
 });
-const store = new mongostore({
+/* const store = new mongostore({
   uri: process.env.NGO_URL_HOSTED,
   collection: "session",
-});
+}); */
 // Log request data
-app.use(morgan("dev"));
+//app.use(morgan("dev"));
 
 // Setup static files path
-app.use("/uploads", express.static("uploads"));
-app.use("/", express.static("public"));
+//app.use("/uploads", express.static("uploads"));
+//app.use("/", express.static("public"));
 
 app.use(express.json());
 
@@ -67,13 +67,13 @@ app.use(bodyParser.json())
 ); */
 
 
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
  
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
     next();
-}); 
+});  */
 
 app.use((req, res, next) => {
   console.log({ body: req.body });
