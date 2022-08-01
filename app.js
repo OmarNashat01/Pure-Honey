@@ -43,8 +43,7 @@ app.use("/", express.static("public"));
 app.use(express.json());
 
 
-app.use(cors(
-
+app.use(cors()
 ));
 //app.use(cookieParser());
 
@@ -69,7 +68,7 @@ app.use(
 
 
 
-/*  app.use(function(req, res, next) {
+  app.use(function(req, res, next) {
   var origin = req.get('origin');
   res.header("Access-Control-Allow-Origin", origin);
   res.header('Content-Type', 'application/json;charset=UTF-8')
@@ -79,7 +78,7 @@ app.use(
     'Origin, X-Requested-With, Content-Type, Accept'
   )
   next()
-})  */
+})  
 
 app.use((req, res, next) => {
   console.log({ body: req.body });
@@ -96,7 +95,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/summary", adminAuth, summary);
-//app.use(Proxy())
+
 app.use("/test", (req, res) => {
   res.json({ message: "API IS WORKING..." });
 });
