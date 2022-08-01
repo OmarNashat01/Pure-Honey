@@ -50,7 +50,9 @@ app.use(
     store,
     cookie:{
       //secure:true,
-     sameSite:false
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax'
     }
   })
 );
