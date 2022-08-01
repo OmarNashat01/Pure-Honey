@@ -249,11 +249,21 @@ exports.pay = async (req, res2, next) => {
                     }
                     //return res2.send("fuck frist req")
                     console.log("here")
-                     axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then((res5)=> {
+                     axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then(async(res5)=> {
                           console.log(res5.data)
                   //  return res2.send("fuck frist req")
                     console.log(res5.data.token)
-                    //return res2.send({token:res5.data.token})
+                    let PreOrder =new preOrder({
+                        _id: mongoose.Types.ObjectId(),
+                        product:req.body.products,
+                        user: req.body.userData.userId,
+                        totalAmount:req.body.totalAmount,
+                        orderNumber:req.body.orderNumber,
+                        firstName:req.body.fristName,
+                        address:req.body.address
+                    });
+                  const preorder= await PreOrder.save()
+                    return res2.send({token:res5.data.token,orderNumber})
                         createpreOrder(req, firstName, address,orderNumber).then(()=>{
                             return res2.send({token:res5.data.token}) 
                             //res2.redirect(301, `http://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`)
@@ -274,6 +284,17 @@ exports.pay = async (req, res2, next) => {
 
 
 })}
+
+
+exports.callback = async(req, res, next) => {
+
+
+ //const preorder =  createpreOrder(req)
+
+
+
+
+}
 exports.callback = async(req, res, next) => {
     try{
            // console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", res.body)
@@ -335,7 +356,7 @@ exports.deleteOneOrder = (req, res, next) => {
 };
 
 
-async function createpreOrder (req, firstName, address,orderNumber) {
+/* async function createpreOrder (req, firstName, address,orderNumber) {
 console.log("🚀 ~ file: orders.js ~ line 304 ~ createpreOrder ~ req", req.body)
   
 
@@ -344,14 +365,14 @@ let PreOrder =new preOrder({
         product:req.body.products,
         user: req.body.userData.userId,
         totalAmount:req.body.totalAmount,
-        orderNumber,
-        firstName,
-        address
+        orderNumber:req.body.orderNumber,
+        firstName:req.body.fristName,
+        address:
     });
   const preorder= await PreOrder.save()
    return preorder
 }
-
+ */
 
 async function getLast30DaysOrdersAmount() {
     let date = new Date();
