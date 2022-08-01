@@ -44,18 +44,18 @@ app.use(express.json());
 
 
 app.use(cors(
-  {
+  /* {
     origin: ['http://localhost:3000',"https://pure-honey.herokuapp.com"],
     credentials: true,
     methods:["GET","POST","DELETE","PATCH"]
-  }
+  } */
 ));
-app.use(cookieParser());
+//app.use(cookieParser());
 
 // Use body parser middleware to parse body of incoming requests
 app.use(
 bodyParser.urlencoded({
-extended: true
+extended: false
 })
 );
 app.use(
