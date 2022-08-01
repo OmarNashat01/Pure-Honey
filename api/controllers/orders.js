@@ -152,7 +152,7 @@ exports.pay = async (req, res2, next) => {
     try {
         carts = req.body.products;
         console.log("🚀 ~ file: orders.js ~ line 72 ~ carts", carts)
-        if (!firstName.trim() || !lastName.trim() || !address.trim()) {
+        if (!firstName.trim()  || !address.trim()) {
             res2.status(400)
             res2.json({
                 error: {
