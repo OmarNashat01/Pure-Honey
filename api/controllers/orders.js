@@ -250,9 +250,10 @@ exports.pay = async (req, res2, next) => {
                     //return res2.send("fuck frist req")
                     console.log("here")
                      axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then(async(res5)=> {
+                        return res2.send({token:res5.data.token})
                           console.log(res5.data)
                   //  return res2.send("fuck frist req")
-                    console.log(res5.data.token)
+                       console.log(res5.data.token)
 /*                     let PreOrder =new preOrder({
                         product:req.body.products,
                         user: req.body.userData.userId,
