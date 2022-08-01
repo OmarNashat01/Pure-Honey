@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 const Order = require('../models/order');
+const preOrder = require('../models/preorder');
+
 const Product = require('../models/product');
 const { productCount } = require('../controllers/products');
-const axios=require("axios")
+const axios = require("axios")
+
+
 exports.getAllOrders = (req, res, next) => {
     if (req.userData.userType == 'user') {
         console.log(req.userData);
@@ -96,10 +100,10 @@ exports.saveOrders = (req, res, next) => {
         })
         return
     }
-      console.log('first')
+    console.log('first')
     let orders = [];
     for (let i = 0; i < carts.length; i++) {
-        orders.push(createOrder(req, carts[i], firstName, lastName, address));
+        orders.push(createpreOrder(req, carts[i], firstName, lastName, address));
     }
 
 
@@ -130,12 +134,65 @@ exports.getOneOrder = (req, res, next) => {
         });
 };
 
-exports.pay =async (req, res2, next) => {
-    console.log("1")
+exports.pay = async (req, res2, next) => {
+
+  //console.log("first")
+
+    //let totalAmount = req.body.totalAmount||4555;
+
+      let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let address = req.body.address;
+   
+
+
+    console.log(req.body.products);
+
+    let carts
+    let orderNumber
+    try {
+        carts = req.body.products;
+        console.log("🚀 ~ file: orders.js ~ line 72 ~ carts", carts)
+        if (!firstName.trim() || !lastName.trim() || !address.trim()) {
+            res2.status(400)
+            res2.json({
+                error: {
+                    message: 'firstName , lastName , address Required..'
+                }
+            })
+            return
+        }
+    } catch (error) {
+        res2.status(400)
+        if (!carts) {
+            res2.json({
+                error: {
+                    message: 'Products Required..'
+                }
+            })
+            return
+        }
+        res2.json({
+            error: {
+                message: 'firstName , lastName , address Required..'
+            }
+        })
+        return
+    }
+    console.log('first') 
+
+
+      
+    
+         //!!  ///////////////////////////////////////////////////////
+    //    return res2.json(preoreder) 
+         //!! //////////////////////////
+         console.log("1")
 
         const apiT = {
           api_key: "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TWpVMk9UVTNMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuVFFHemNkSEtqdV9rd05xYlo1Ym8tTDAwVzhWTXhIS1JLQVV4SFFUY0ZwSUF2dWdGandUU3Vyc1pDSEdvOUxkVlduTGJ6ZGF2TDNCanNaeXVFdEpLT2c="
         } 
+       // return res2.send("i")
           axios.post('https://accept.paymob.com/api/auth/tokens',apiT ).then((res)=>{
               const totalAmount=4555
               
@@ -161,16 +218,17 @@ exports.pay =async (req, res2, next) => {
                   items: items
                 }
                 console.log("2")
-
+              //  return res2.json("i")
                 axios.post('https://accept.paymob.com/api/ecommerce/orders', orderData).then((res)=>{
            
-                      const order_id = res.data.id;
+                      const orderNumber = res.data.id;
+                      
         
                       const keyData = {
                           auth_token: APITOKEN,
                           amount_cents: amount_cents , 
                           expiration: 3600, 
-                          order_id: order_id,
+                          order_id: orderNumber,
                           "billing_data": {
                             "apartment": "803", 
                             "email": "claudette09@exa.com", 
@@ -191,21 +249,51 @@ exports.pay =async (req, res2, next) => {
                           
                     }
                     console.log("here")
-                     axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then((res)=> {
-                          console.log(res.data)
-                        res2.redirect(301,`https://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res.data.token}`);
+                     axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then((res5)=> {
+                          console.log(res5.data)
+                        createpreOrder(req, firstName, lastName, address,orderNumber).then(()=>{
+                            return res2.json({token:res5.data.token}) 
+                            //res2.redirect(301, `http://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`)
+                            //proxy.web(req, res2, { target:`https://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`});
+                              
+                }).catch((err)=>{
+                       console.log("🚀 ~ file: orders.js ~ line 258 ~ createpreOrder ~ err", err)
+                            
+                      //  })
+
         
                     })
                     })
+
         
         
           })
-        
-        
-};
-exports.callpack = (req, res, next) => {
-console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", res.body)
-    //res.send("done")
+
+
+})}
+exports.callback = async(req, res, next) => {
+    try{
+           // console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", res.body)
+      const preorder=await preOrder.findOne({orderNumber:res.query.order})
+      if(!order){
+        throw Error("no oders")
+      }
+    const order=new Order({
+        user:preorder.user,
+        product:preorder.product,
+        firstName:preorder.firstName,
+        lastName:preorder.lastName,
+        address:preorder.address,
+        quantity:preorder.quantity,
+        paymentMethod:preorder.paymentMethod,
+        orderNumber:preorder.orderNumber
+    })
+    await order.save() 
+
+     res.redirect(301,`http://localhost:3000/`);
+    }catch (err){
+     res.send({err})
+    }
 };
 
 
@@ -244,19 +332,23 @@ exports.deleteOneOrder = (req, res, next) => {
 };
 
 
-function createOrder(req, productInfo, firstName, lastName, address) {
-console.log("🚀 ~ file: orders.js ~ line 169 ~ createOrder ~ productInfo", productInfo)
-    
-    return new Order({
+async function createpreOrder (req, firstName, lastName, address,orderNumber) {
+console.log("🚀 ~ file: orders.js ~ line 304 ~ createpreOrder ~ req", req.body)
+  
+
+let PreOrder =new preOrder({
         _id: mongoose.Types.ObjectId(),
-        product: productInfo.productId,
-        quantity: productInfo.quantity,
-        price: productInfo.price,
-        user: req.userData.userId,
+        product:req.body.products,
+        user: req.body.userData.userId,
+        totalAmount:req.body.totalAmount,
+        totalQuantity:req.body.totalQuantity,
+        orderNumber,
         firstName,
         lastName,
         address
     });
+  const preorder= await PreOrder.save()
+   return preorder
 }
 
 
@@ -267,23 +359,23 @@ async function getLast30DaysOrdersAmount() {
 
     return Order.aggregate(
         [{
-                $match: {
-                    "created_at": {
-                        $gte: date,
+            $match: {
+                "created_at": {
+                    $gte: date,
+                }
+            }
+        },
+        {
+
+            '$group': {
+                _id: '',
+                totalAmount: {
+                    '$sum': {
+                        "$multiply": ['$price', '$quantity']
                     }
                 }
             },
-            {
-
-                '$group': {
-                    _id: '',
-                    totalAmount: {
-                        '$sum': {
-                            "$multiply": ['$price', '$quantity']
-                        }
-                    }
-                },
-            }
+        }
         ]
     ).then(r => {
         return r[0].totalAmount
@@ -298,15 +390,15 @@ async function getLast30DaysOrderCount() {
 
     return Order.aggregate(
         [{
-                $match: {
-                    "created_at": {
-                        $gte: date,
-                    }
+            $match: {
+                "created_at": {
+                    $gte: date,
                 }
-            },
-            {
-                "$count": 'orderCount'
             }
+        },
+        {
+            "$count": 'orderCount'
+        }
         ]
     ).then(r => {
         console.log(r);
@@ -334,48 +426,48 @@ async function getLast30DaysProductWiseSelling() {
     console.log(date.toDateString());
     return Order.aggregate(
         [{
-                $match: {
-                    "created_at": {
-                        $gte: date,
+            $match: {
+                "created_at": {
+                    $gte: date,
+                }
+            }
+        },
+        {
+
+            '$group': {
+                _id: '$product',
+                quantity: {
+                    '$sum': '$quantity'
+                },
+                totalSale: {
+                    '$sum': {
+                        '$multiply': ['$quantity', '$price']
                     }
                 }
             },
-            {
-
-                '$group': {
-                    _id: '$product',
-                    quantity: {
-                        '$sum': '$quantity'
-                    },
-                    totalSale: {
-                        '$sum': {
-                            '$multiply': ['$quantity', '$price']
-                        }
-                    }
-                },
-            },
+        },
 
 
         ]
     ).
-    then(r => {
-        let o = Array.from(r)
-        let arr = [];
-        o.forEach(e => {
-            arr.push(Product.findOne({ _id: e._id })
-                .then(product => {
-                    e.product = product
-                    return e
+        then(r => {
+            let o = Array.from(r)
+            let arr = [];
+            o.forEach(e => {
+                arr.push(Product.findOne({ _id: e._id })
+                    .then(product => {
+                        e.product = product
+                        return e
                         // console.log(product);
-                }))
+                    }))
+            })
+
+            return Promise.all(arr)
+
         })
-
-        return Promise.all(arr)
-
-    })
 }
 
-exports.summary = async function(req, res, next) {
+exports.summary = async function (req, res, next) {
     try {
         let result = await _summary();
         res.json({ result })
@@ -386,7 +478,8 @@ exports.summary = async function(req, res, next) {
 
 
 const { getLast30DaysRegisteredUser } = require('../controllers/user')
-const { getTotalUserCount } = require('../controllers/user')
+const { getTotalUserCount } = require('../controllers/user');
+const order = require('../models/order');
 
 async function _summary() {
     let pc = await productCount();
@@ -408,19 +501,19 @@ async function _summary() {
 }
 
 
-exports.getmostpopularproduct = async(req, res, next) => {
+exports.getmostpopularproduct = async (req, res, next) => {
 
-    products=await Order.aggregate([
+    products = await Order.aggregate([
 
         {
-          $project : { 
-                        product :1, 
-                         amount: { $size: "$following" }  
-                     }
+            $project: {
+                product: 1,
+                amount: { $size: "$following" }
+            }
         },
-        {$sort: { amount: 1 } }
-        
-])
+        { $sort: { amount: 1 } }
 
-return res.status(200).json(products)
+    ])
+
+    return res.status(200).json(products)
 }

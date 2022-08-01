@@ -44,11 +44,11 @@ app.use(express.json());
 
 
 app.use(cors(
-  /* {
+   {
     origin: ['http://localhost:3000',"https://pure-honey.herokuapp.com"],
-    credentials: true,
+   // credentials: true,
     methods:["GET","POST","DELETE","PATCH"]
-  } */
+  } 
 ));
 //app.use(cookieParser());
 
@@ -100,6 +100,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/summary", adminAuth, summary);
+//app.use(Proxy())
 app.use("/test", (req, res) => {
   res.json({ message: "API IS WORKING..." });
 });

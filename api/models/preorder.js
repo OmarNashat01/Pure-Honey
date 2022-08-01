@@ -1,19 +1,18 @@
 const mongoose = require('mongoose');
 
-const orderSchema = mongoose.Schema({
+const preorderSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    product: [{ type: mongoose.Schema.Types.ObjectId, required: true }],
+    product: [{id:{ type: mongoose.Schema.Types.ObjectId, required: true },quantity:{type:Number,required: true}}],
     firstName: { type: String, require: true },
     lastName: { type: String, require: true },
     address: { type: String, require: true },
-    quantity: { type: Number, default: 1 },
+    totalQuantity: { type: Number, default: 1 },
     paymentMethod: { type: String, default: "COD" },
     orderNumber:{type: Number},
-    status: {
-        type: mongoose.Schema.Types.String,
-        default: 'pending'
-    }
+
+    totalAmount:{ type: Number,required: true}
+
 }, { timestamps: { createdAt: 'created_at' } });
 
-module.exports = mongoose.model('Order', orderSchema);
+module.exports = mongoose.model('preorder', preorderSchema);
