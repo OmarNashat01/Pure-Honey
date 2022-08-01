@@ -40,6 +40,7 @@ app.use(morgan("dev"));
 app.use("/uploads", express.static("uploads"));
 app.use("/", express.static("public"));
 
+app.use(express.json());
 
 
 app.use(cors(
@@ -49,8 +50,9 @@ app.use(cors(
     methods:["GET","POST","DELETE","PATCH"]
   }
 ));
+app.use(cookieParser());
+
 // Use body parser middleware to parse body of incoming requests
-app.use(bodyParser.json());
 app.use(
 bodyParser.urlencoded({
 extended: true
@@ -63,12 +65,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store,
-    cookie:{
-    
-    }
   })
 );
-app.use(cookieParser());
 
 
 
