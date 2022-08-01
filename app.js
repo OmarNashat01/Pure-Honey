@@ -47,7 +47,11 @@ app.use(
     secret: process.env.JWT_KEY,
     resave: false,
     saveUninitialized: false,
-    store
+    store,
+    cookie:{
+      //secure:true,
+     sameSite:false
+    }
   })
 );
 
