@@ -45,7 +45,7 @@ app.use(express.json());
 
 app.use(cors(
   {
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000',"https://pure-honey.herokuapp.com"],
     credentials: true,
     methods:["GET","POST","DELETE","PATCH"]
   }
