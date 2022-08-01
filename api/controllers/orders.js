@@ -140,8 +140,7 @@ exports.pay = async (req, res2, next) => {
 
     let totalAmount = req.body.totalAmount;
 
-      let firstName = req.body.firstName;
-    let lastName = req.body.lastName;
+      let firstName = req.body.firstName
     let address = req.body.address;
    
 
@@ -251,7 +250,7 @@ exports.pay = async (req, res2, next) => {
                     console.log("here")
                      axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then((res5)=> {
                           console.log(res5.data)
-                        createpreOrder(req, firstName, lastName, address,orderNumber).then(()=>{
+                        createpreOrder(req, firstName, address,orderNumber).then(()=>{
                             return res2.json({token:res5.data.token}) 
                             //res2.redirect(301, `http://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`)
                             //proxy.web(req, res2, { target:`https://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`});
@@ -332,7 +331,7 @@ exports.deleteOneOrder = (req, res, next) => {
 };
 
 
-async function createpreOrder (req, firstName, lastName, address,orderNumber) {
+async function createpreOrder (req, firstName, address,orderNumber) {
 console.log("🚀 ~ file: orders.js ~ line 304 ~ createpreOrder ~ req", req.body)
   
 
@@ -343,7 +342,6 @@ let PreOrder =new preOrder({
         totalAmount:req.body.totalAmount,
         orderNumber,
         firstName,
-        lastName,
         address
     });
   const preorder= await PreOrder.save()
