@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Order = require('../models/order');
 const Product = require('../models/product');
 const { productCount } = require('../controllers/products');
-
+const axios=require("axios")
 exports.getAllOrders = (req, res, next) => {
     if (req.userData.userType == 'user') {
         console.log(req.userData);
@@ -129,6 +129,85 @@ exports.getOneOrder = (req, res, next) => {
             next(error);
         });
 };
+
+exports.pay =async (req, res2, next) => {
+    console.log("1")
+
+        const apiT = {
+          api_key: "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TWpVMk9UVTNMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuVFFHemNkSEtqdV9rd05xYlo1Ym8tTDAwVzhWTXhIS1JLQVV4SFFUY0ZwSUF2dWdGandUU3Vyc1pDSEdvOUxkVlduTGJ6ZGF2TDNCanNaeXVFdEpLT2c="
+        } 
+          axios.post('https://accept.paymob.com/api/auth/tokens',apiT ).then((res)=>{
+              const totalAmount=4555
+              
+              const amount_cents = (50+totalAmount)*100;
+              const items = [{
+                name: "عسل",
+                amount_cents: 15550000,
+                description: 'gg',
+                quantity: 2
+              }];
+              
+               /*  Data.map((p) => {  
+                const I = 
+                  items.push(I);
+                }) */
+            
+                const APITOKEN = res.data.token;
+                const orderData = {
+                  auth_token: APITOKEN,
+                  delivery_needed: true,
+                  amount_cents:  amount_cents,
+                  currency: "EGP",
+                  items: items
+                }
+                console.log("2")
+
+                axios.post('https://accept.paymob.com/api/ecommerce/orders', orderData).then((res)=>{
+           
+                      const order_id = res.data.id;
+        
+                      const keyData = {
+                          auth_token: APITOKEN,
+                          amount_cents: amount_cents , 
+                          expiration: 3600, 
+                          order_id: order_id,
+                          "billing_data": {
+                            "apartment": "803", 
+                            "email": "claudette09@exa.com", 
+                            "floor": "42", 
+                            "first_name": "Clifford", 
+                            "street": "Ethan Land", 
+                            "building": "8028", 
+                            "phone_number": "+86(8)9135210487", 
+                            "shipping_method": "PKG", 
+                            "postal_code": "01898", 
+                            "city": "Jaskolskiburgh", 
+                            "country": "CR", 
+                            "last_name": "Nicolas", 
+                            "state": "Utah"
+                          }, 
+                          currency: "EGP", 
+                          integration_id: 2492630,
+                          
+                    }
+                    console.log("here")
+                     axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then((res)=> {
+                          console.log(res.data)
+                        res2.redirect(301,`https://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res.data.token}`);
+        
+                    })
+                    })
+        
+        
+          })
+        
+        
+};
+exports.callpack = (req, res, next) => {
+console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", res.body)
+    //res.send("done")
+};
+
 
 exports.updateOneOrder = (req, res, next) => {
     const orderId = req.params.orderId;

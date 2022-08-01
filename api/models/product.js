@@ -7,6 +7,7 @@ const productSchema = mongoose.Schema({
     productImage: [{ type: String }],
     description: {type: String},
     category: { type: String, required: false },
+    count:{type:Number,default:0},
     cat: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: false }
 });
 

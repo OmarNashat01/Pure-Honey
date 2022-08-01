@@ -17,4 +17,5 @@ router.patch('', checkAuths.userAuth, UserController.updateuser)
 router.get('', checkAuths.adminAuth, UserController.getAll)
 router.get('/me', checkAuths.userAuth, UserController.getProfile)
 
+
 module.exports = router;

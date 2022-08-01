@@ -3,10 +3,13 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
+
 const mongostore = require("connect-mongodb-session")(session);
 const app = express();
+
 var cors = require("cors");
-app.use(cors());
+//app.use(cors());
 
 const port = process.env.PORT || 3000;
 const productRoutes = require("./api/routes/products");
@@ -37,30 +40,46 @@ app.use(morgan("dev"));
 app.use("/uploads", express.static("uploads"));
 app.use("/", express.static("public"));
 
-// Use body parser middleware to parse body of incoming requests
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+
 app.use(
   session({
+    name:"session",
     secret: process.env.JWT_KEY,
     resave: false,
-    saveUninitialized: false,
-    store
+    saveUninitialized: true,
+    store,
   })
 );
-// Setup CORS
-/* app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-    return res.status(200).json({});
+
+// Use body parser middleware to parse body of incoming requests
+app.use(bodyParser.json());
+app.use(
+bodyParser.urlencoded({
+extended: false
+})
+);
+ 
+app.use(cookieParser());
+
+app.use(cors(
+  {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
-  next();
-}); */
+));
+
+app.use(function(req, res, next) {
+  var origin = req.get('origin');
+  res.header("Access-Control-Allow-Origin", origin);
+  res.header('Content-Type', 'application/json;charset=UTF-8')
+  res.header('Access-Control-Allow-Credentials', true)
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  next()
+})
 
 app.use((req, res, next) => {
   console.log({ body: req.body });

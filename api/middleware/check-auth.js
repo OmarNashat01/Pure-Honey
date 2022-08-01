@@ -6,7 +6,7 @@ auths.userAuth = (req, res, next) => {
  
     var token
     try {  
-          console.log("🚀 ~ file: check-auth.js ~ line 14 ~ req.session.token", req.session.token)
+          console.log("🚀 ~ file: check-auth.js ~ line 14 ~ req.session.token", req.session)
         if(req.headers.authorization ||req.session.token){
           if (req.headers.authorization) {
             token = req.headers.authorization.split(" ")[1];
