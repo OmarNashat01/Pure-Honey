@@ -9,7 +9,7 @@ const mongostore = require("connect-mongodb-session")(session);
 const app = express();
 
 var cors = require("cors");
-//app.use(cors());
+app.use(cors());
 
 const port = process.env.PORT || 3000;
 const productRoutes = require("./api/routes/products");
