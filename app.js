@@ -73,7 +73,7 @@ app.use(
 
 
 
- app.use(function(req, res, next) {
+/*  app.use(function(req, res, next) {
   var origin = req.get('origin');
   res.header("Access-Control-Allow-Origin", origin);
   res.header('Content-Type', 'application/json;charset=UTF-8')
@@ -83,7 +83,7 @@ app.use(
     'Origin, X-Requested-With, Content-Type, Accept'
   )
   next()
-}) 
+})  */
 
 app.use((req, res, next) => {
   console.log({ body: req.body });
