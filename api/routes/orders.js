@@ -8,9 +8,7 @@ router.get('/', auth.userAuth, OrdersController.getAllOrders);
 router.post('/', auth.userAuth, OrdersController.saveOrders);
 router.post('/', auth.adminAuth, OrdersController.getmostpopularproduct);
 router.post('/pay'/* , auth.userAuth */, OrdersController.pay  );
-router.post('/c'/* , auth.userAuth */,(req,res)=>{
-    res.send("fuck cors")
-}  );
+router.post('/c'/* , auth.userAuth */, OrdersController.pay  );
 
 
 router.post('/p'/* , auth.userAuth , */,OrdersController.pay );
