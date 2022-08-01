@@ -46,8 +46,8 @@ app.use(
     name:"session",
     secret: process.env.JWT_KEY,
     resave: false,
-    saveUninitialized: true,
-    store,
+    saveUninitialized: false,
+    store
   })
 );
 
