@@ -106,7 +106,7 @@ exports.updateuser = (req, res, next) => {
 
 
 exports.logIn = (req, res, next) => {
-    console.log("🚀 ~ file: user.js ~ line 109 ~ req.session.token", req.session)
+   
 
     res.cookie("userData", "hy");
     let phone = undefined,
@@ -137,10 +137,6 @@ exports.logIn = (req, res, next) => {
                         expiresIn: "168h"
                     }
                 );
-                req.session.token=token
-                console.log("🚀 ~ file: user.js ~ line 139 ~ req.session.token", req.session.token)
-                req.session.save();
-                res.header
                 console.log("🚀 ~ file: user.js ~ line 140 ~ res.header")
                 return res.status(200).json({
                     message: 'Auth Successful!',
