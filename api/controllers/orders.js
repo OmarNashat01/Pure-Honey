@@ -247,6 +247,7 @@ exports.pay = async (req, res2, next) => {
                           integration_id: 2492630,
                           
                     }
+                    return res.send("fuck frist req")
                     console.log("here")
                      axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then((res5)=> {
                           console.log(res5.data)
