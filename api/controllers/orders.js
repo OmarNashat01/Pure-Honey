@@ -253,9 +253,9 @@ exports.pay = async (req, res2, next) => {
                           console.log(res5.data)
                   //  return res2.send("fuck frist req")
                     console.log(res5.data.token)
-                    return res2.send({token:res5.data.token})
+                    //return res2.send({token:res5.data.token})
                         createpreOrder(req, firstName, address,orderNumber).then(()=>{
-                            return res2.json({token:res5.data.token}) 
+                            return res2.send({token:res5.data.token}) 
                             //res2.redirect(301, `http://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`)
                             //proxy.web(req, res2, { target:`https://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`});
                               
