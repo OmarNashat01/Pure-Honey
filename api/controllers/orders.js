@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Order = require('../models/order');
 const preOrder = require('../models/preorder');
+const catchAsync = require('../middleware/catchAsync');
 
 const Product = require('../models/product');
 const { productCount } = require('../controllers/products');
@@ -134,7 +135,7 @@ exports.getOneOrder = (req, res, next) => {
         });
 };
 
-exports.pay = async (req, res2, next) => {
+exports.pay = catchAsync(async (req, res2, next) => {
 
   //console.log("first")
 
@@ -247,7 +248,7 @@ exports.pay = async (req, res2, next) => {
                           integration_id: 2492630,
                           
                     }
-                    return res2.send("fuck frist req")
+                    //return res2.send("fuck frist req")
                     console.log("here")
                      axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then(async(res5)=> {
                         return res2.send({token:res5.data.token})
@@ -286,7 +287,7 @@ exports.pay = async (req, res2, next) => {
           })
 
 
-})}
+})})
 
 
 
