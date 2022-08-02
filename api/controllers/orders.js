@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const Order = require('../models/order');
 const preOrder = require('../models/preorder');
 const catchAsync = require('../middleware/catchAsync');
-
 const Product = require('../models/product');
+
+
 const { productCount } = require('../controllers/products');
 const axios = require("axios")
 
@@ -258,7 +259,7 @@ exports.pay = catchAsync(async (req, res2, next) => {
                         product:req.body.products,
                         user: req.body.userData.userId,
                         totalAmount:req.body.totalAmount,
-                        orderNumber:req.body.orderNumber,
+                        orderNumber:orderNumber,
                         firstName:req.body.fristName,
                         address:req.body.address
                     });
@@ -283,32 +284,41 @@ exports.pay = catchAsync(async (req, res2, next) => {
 
 
 
-exports.callback = async(req, res, next) => {
+exports.callback =catchAsync( async(req, res, next) => {
     try{
-           // console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", res.body)
-/*       const preorder=await preOrder.findOne({orderNumber:res.query.order})
-      if(!order){
-        throw Error("no oders")
-      }
-    const order=new Order({
-        user:preorder.user,
-        product:preorder.product,
-        firstName:preorder.firstName,
-        lastName:preorder.lastName,
-        address:preorder.address,
-        quantity:preorder.quantity,
-        paymentMethod:preorder.paymentMethod,
-        orderNumber:preorder.orderNumber
-    })
-    await order.save()  */
+        console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", req.query.order)
+        const preorder=await preOrder.findOne({orderNumber:req.query.order})
+        console.log("🚀 ~ file: orders.js ~ line 290 ~ exports.callback=catchAsync ~ preorder", preorder)
+     
+      await Order.create({
+         user:preorder.user,
+         product:preorder.product,
+         firstName:preorder.firstName,
+         address:preorder.address,
+         orderNumber:preorder.orderNumber,
+         totalAmount:preorder.totalAmount
+     }) 
 
+     for (let index = 0; index < preorder.product.length; index++) {
+        const element = preorder.product[index];
+        await Product.updateOne({_id:element.id},{$inc:{count:element.count}})
+        
+     }
      res.redirect(301,`http://localhost:3000/`);
     }catch (err){
      res.send({err})
     }
-};
+});
 
-
+exports.mostpopularproduct =catchAsync( async(req, res, next) => {
+    try{
+        
+      const mostpopularproduct=   await Product.find().limit(6).sort({count:-1})
+     res.send(mostpopularproduct)
+    }catch (err){
+res.send({err})
+    }
+})
 exports.updateOneOrder = (req, res, next) => {
     const orderId = req.params.orderId;
     Order
