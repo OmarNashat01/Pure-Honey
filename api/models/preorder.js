@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
 const preorderSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    product: [{id:{ type: mongoose.Schema.Types.ObjectId, required: true },quantity:{type:Number,required: true}}],
+    product: [{id:{ type: mongoose.Schema.Types.ObjectId, required: true },count:{type:Number,required: true}}],
     firstName: { type: String, require: true },
     lastName: { type: String, require: true },
     address: { type: String, require: true },

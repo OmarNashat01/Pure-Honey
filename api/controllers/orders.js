@@ -251,11 +251,10 @@ exports.pay = catchAsync(async (req, res2, next) => {
                     //return res2.send("fuck frist req")
                     console.log("here")
                      axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then(async(res5)=> {
-                        return res2.send({token:res5.data.token})
                           console.log(res5.data)
-                  //  return res2.send("fuck frist req")
-                       console.log(res5.data.token)
-/*                     let PreOrder =new preOrder({
+                    
+   
+                  let PreOrder =new preOrder({
                         product:req.body.products,
                         user: req.body.userData.userId,
                         totalAmount:req.body.totalAmount,
@@ -263,16 +262,9 @@ exports.pay = catchAsync(async (req, res2, next) => {
                         firstName:req.body.fristName,
                         address:req.body.address
                     });
-                    const preorder= await PreOrder.save() */
-                   // console.log("🚀 ~ file: orders.js ~ line 264 ~ axios.post ~ PreOrder", PreOrder)
-                    return res2.send({token:res5.data.token,orderNumber})
+                    const preorder= await PreOrder.save() 
+                    return res2.send({token:res5.data.token})
 
-                
-                        createpreOrder(req, firstName, address,orderNumber).then(()=>{
-                            return res2.send({token:res5.data.token}) 
-                            //res2.redirect(301, `http://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`)
-                            //proxy.web(req, res2, { target:`https://accept.paymob.com/api/acceptance/iframes/439131?payment_token=${res5.data.token}`});
-                              
                 }).catch((err)=>{
                        console.log("🚀 ~ file: orders.js ~ line 258 ~ createpreOrder ~ err", err)
                             
@@ -287,7 +279,7 @@ exports.pay = catchAsync(async (req, res2, next) => {
           })
 
 
-})})
+})
 
 
 

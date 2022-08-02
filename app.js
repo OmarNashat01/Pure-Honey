@@ -79,6 +79,8 @@ app.use((req, res, next) => {
   console.log({ body: req.body });
   console.log({ query: req.query });
   console.log({ params: req.params });
+  console.log({ params: req.headers });
+
 
   next();
 });
