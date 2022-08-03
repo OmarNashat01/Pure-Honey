@@ -7,32 +7,12 @@ require('dotenv').config();
 const cloudinary = require('../middleware/cloudinary')
 
 exports.admingetAllProducts = catchAsync(async (req, res, next) => {
-    let filter = {
-        price: {
-            "$lte": 9999999999,
-            "$gte": 0
-        }
-    }
-    if (!isNaN(req.query.max)) {
-        filter.price["$lte"] = req.query.max
-    }
-    if (req.query.category) {
-        filter.category = req.query.category
-    }
-    if (!isNaN(req.query.min)) {
-        filter.price["$gte"] = req.query.min
-    }
-    
-    console.log("=================================================")
-    console.log(req.query.min);
-    console.log(filter);
-    console.log("=================================================")
+   
     try{
-        filter.type=req.query.type
-        let prods = await Product.find(filter)
+        let prods = await Product.find({type:req.query.pe})
      
         console.log(prods);
-        res.status(200).json(sortedProduct);
+        res.status(200).send(prods);
     }
     catch (error) {
         res
