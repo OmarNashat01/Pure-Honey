@@ -4,7 +4,6 @@ const preOrder = require('../models/preorder');
 const catchAsync = require('../middleware/catchAsync');
 const Product = require('../models/product');
 
-
 const { productCount } = require('../controllers/products');
 const axios = require("axios")
 
@@ -17,10 +16,7 @@ exports.getAllOrders = (req, res, next) => {
             .select()
             .sort("-created_at")
             .populate({
-                path: 'product',
-                populate: {
-                    path: 'category'
-                }
+                path: 'product.id',
             })
             .populate('user')
             .exec()
@@ -46,10 +42,8 @@ exports.getAllOrders = (req, res, next) => {
 
     o.select()
         .populate({
-            path: 'product',
-            populate: {
-                path: 'category'
-            }
+            path: 'product.id',
+          
         })
         .populate('user')
         .sort("-created_at")
@@ -286,6 +280,13 @@ exports.pay = catchAsync(async (req, res2, next) => {
 
 exports.callback =catchAsync( async(req, res, next) => {
     try{
+      //** ///////////////////////
+     // let HMACConcatenatedString=amount_cents+created_at+currency+error_occured+has_parent_transaction+id+integration_id+is_3d_secure+is_auth+is_capture+is_refunded+is_standalone_payment+is_voided+order+owner+pending+source_data
+
+
+     
+
+      //** ////////////////////////
         console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", req.query.order)
         const preorder=await preOrder.findOne({orderNumber:req.query.order})
         console.log("🚀 ~ file: orders.js ~ line 290 ~ exports.callback=catchAsync ~ preorder", preorder)
@@ -310,15 +311,7 @@ exports.callback =catchAsync( async(req, res, next) => {
     }
 });
 
-exports.mostpopularproduct =catchAsync( async(req, res, next) => {
-    try{
-        
-      const mostpopularproduct=   await Product.find().limit(6).sort({count:-1})
-     res.send(mostpopularproduct)
-    }catch (err){
-res.send({err})
-    }
-})
+
 exports.updateOneOrder = (req, res, next) => {
     const orderId = req.params.orderId;
     Order
@@ -334,7 +327,6 @@ exports.updateOneOrder = (req, res, next) => {
             next(error);
         });
 };
-
 
 
 exports.deleteOneOrder = (req, res, next) => {
@@ -520,20 +512,3 @@ async function _summary() {
     }
 }
 
-
-exports.getmostpopularproduct = async (req, res, next) => {
-
-    products = await Order.aggregate([
-
-        {
-            $project: {
-                product: 1,
-                amount: { $size: "$following" }
-            }
-        },
-        { $sort: { amount: 1 } }
-
-    ])
-
-    return res.status(200).json(products)
-}
