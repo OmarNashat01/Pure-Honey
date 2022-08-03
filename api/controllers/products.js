@@ -9,7 +9,7 @@ const cloudinary = require('../middleware/cloudinary')
 exports.admingetAllProducts = catchAsync(async (req, res, next) => {
    
     try{
-        let prods = await Product.find({type:req.query.pe})
+        let prods = await Product.find({type:req.query.type})
      
         console.log(prods);
         res.status(200).send(prods);
