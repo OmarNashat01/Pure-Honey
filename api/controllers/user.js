@@ -61,7 +61,7 @@ exports.getProfile = (req, res, next) => {
 
     User
         .findOne({ phone: req.userData.phone })
-        .select('_id name phone')
+        .select('_id address userType name phone')
         .exec()
         .then(user => {
             if (user.length < 1) {
