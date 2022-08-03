@@ -1,11 +1,14 @@
 
 const mongoose = require('mongoose');
 const offers = require('../models/offers');
+const Product = require('../models/product');
+
 const Category = require('../models/category');
 const catchAsync = require('../middleware/catchAsync');
 const { response } = require('express');
 require('dotenv').config();
-const cloudinary = require('../middleware/cloudinary')
+const cloudinary = require('../middleware/cloudinary');
+const product = require('../models/product');
 
 exports.getAlloffers = catchAsync(async (req, res, next) => {
 
@@ -24,13 +27,14 @@ exports.getAlloffers = catchAsync(async (req, res, next) => {
     if (!isNaN(req.query.min)) {
         filter.price["$gte"] = req.query.min
     }
+    filter.type='offer'
 
     console.log("=================================================")
     console.log(req.query.min);
     console.log(filter);
     console.log("=================================================")
     try{
-        let prods = await offers.find(filter)
+        let prods = await Product.find(filter)
         var sortedoffers = prods.reduce((obj,value) =>{
             let key =  value.category;
             if (obj[key] != null){
@@ -153,7 +157,7 @@ exports.updateOneoffer = (req, res, next) => {
 
 exports.deleteOneoffer = (req, res, next) => {
     const offersId = req.params.offerId;
-    offers
+    product
         .remove({ _id: offersId })
         .exec()
         .then(result => {
@@ -185,10 +189,11 @@ console.log('174')
 
     console.log('184')
     //===========================================================
-    let res = await offers.create({
+    let res = await product.create({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         price: req.body.price,
+        type:'offer',
         category: req.body.category,
         description: req.body.description,
         productImage: urls

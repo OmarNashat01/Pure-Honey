@@ -8,6 +8,7 @@ const productSchema = mongoose.Schema({
     description: {type: String},
     category: { type: String, required: false },
     count:{type:Number,default:0},
+    type:{type: String ,default:'product'},
     cat: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: false }
 });
 

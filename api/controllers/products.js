@@ -23,12 +23,13 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     if (!isNaN(req.query.min)) {
         filter.price["$gte"] = req.query.min
     }
-
+    
     console.log("=================================================")
     console.log(req.query.min);
     console.log(filter);
     console.log("=================================================")
     try{
+        filter.type=req.query.type
         let prods = await Product.find(filter)
         var sortedProduct = prods.reduce((obj,value) =>{
             let key =  value.category;
@@ -93,14 +94,7 @@ exports.createOneProduct =catchAsync( async (req, res, next) => {
         try {
             res.status(200).json({
                 message: 'Product Created Successfully!',
-                product: {
-                    _id: product._id,
-                    name: product.name,
-                    category: product.category,
-                    description: product.description,
-                    price: product.price,
-                    productImage: product.productImage
-                }
+                product
             });
         }
         catch(error){
@@ -195,6 +189,7 @@ const createProduct = async (req)=> {
         name: req.body.name,
         price: req.body.price,
         category: req.body.category,
+        type:req.body.type,
         description: req.body.description,
         productImage: urls
     });

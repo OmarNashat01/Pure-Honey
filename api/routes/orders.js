@@ -11,13 +11,8 @@ router.post('/pay'/* , auth.userAuth */, OrdersController.pay  );
 router.post('/c'/* , auth.userAuth */, OrdersController.pay  );
 router.get('/mostpopularproduct' , auth.adminAuth , OrdersController.mostpopularproduct  );
 
-
-
 router.post('/p'/* , auth.userAuth , */,OrdersController.pay );
 router.get('/callback'/* , auth.userAuth */, OrdersController.callback);
-
-
-
 
 
 router.get('/:orderId', auth.userAuth, OrdersController.getOneOrder);
