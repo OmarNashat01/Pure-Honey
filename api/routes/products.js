@@ -34,6 +34,8 @@ const ProductsController = require('../controllers/products');
 router.get('/mostpopularproduct' , ProductsController.mostpopularproduct  );
 
 router.get('/',ProductsController.getAllProducts);
+router.get('/admin',auths.adminAuth,ProductsController.admingetAllProducts);
+
 
 router.post('/', auths.adminAuth,upload.array('productImage'), ProductsController.createOneProduct);
 

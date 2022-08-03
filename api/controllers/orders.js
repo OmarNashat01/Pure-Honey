@@ -3,6 +3,7 @@ const Order = require('../models/order');
 const preOrder = require('../models/preorder');
 const catchAsync = require('../middleware/catchAsync');
 const Product = require('../models/product');
+var sha512 = require('js-sha512');
 
 const { productCount } = require('../controllers/products');
 const axios = require("axios")
@@ -281,10 +282,17 @@ exports.pay = catchAsync(async (req, res2, next) => {
 exports.callback =catchAsync( async(req, res, next) => {
     try{
       //** ///////////////////////
-     // let HMACConcatenatedString=amount_cents+created_at+currency+error_occured+has_parent_transaction+id+integration_id+is_3d_secure+is_auth+is_capture+is_refunded+is_standalone_payment+is_voided+order+owner+pending+source_data
+      let HMACConcatenatedString=req.query.amount_cents.toString()+req.query.created_at.toString()+req.query.currency.toString()+req.query.error_occured.toString()+req.query.has_parent_transaction.toString()+req.query.id.toString()+req.query.integration_id.toString()+req.query.is_3d_secure.toString()+req.query.is_auth.toString()+req.query.is_capture.toString()+req.query.is_refunded.toString()+req.query.is_standalone_payment.toString()+req.query.is_voided.toString()+req.query.order.toString()+req.query.owner.toString()+req.query.pending.toString()+req.query['source_data.pan'].toString()+req.query['source_data.sub_type'].toString()+req.query['source_data.type'].toString()+req.query.success.toString()
+      console.log("🚀 ~ file: orders.js ~ line 285 ~ exports.callback=catchAsync ~ HMACConcatenatedString",HMACConcatenatedString)
+//console.log(req.query['source_data.pan'
 
-
-     
+           const hash=sha512.hmac('46BFB61197F430B1FBEF7C5DACB48C98', HMACConcatenatedString);
+           console.log("🚀 ~ file: orders.js ~ line 290 ~ exports.callback=catchAsync ~ hash", hash)
+           console.log("🚀 ~ file: orders.js ~ line 290 ~ exports.callback=catchAsync ~ hmac", req.query.hmac)
+       if(hash===req.req.query.hmac||!req.query.success)
+       {
+        return res.status(400).send({err:"error happend "})
+       }
 
       //** ////////////////////////
         console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", req.query.order)
