@@ -31,6 +31,7 @@ const upload = multer({
 });
 
 const ProductsController = require('../controllers/products');
+router.get('/mostpopularproduct' , ProductsController.mostpopularproduct  );
 
 router.get('/',ProductsController.getAllProducts);
 
