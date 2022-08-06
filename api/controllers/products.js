@@ -145,15 +145,28 @@ exports.getOneProduct = (req, res, next) => {
         });
 };
 
-exports.updateOneProduct = (req, res, next) => {
+exports.updateOneProduct =catchAsync(async (req, res, next) => {
     const productId = req.params.productId;
     // const updateOps = {};
     // for (const prop of req.body) {
     // 	updateOps[prop.propName] = prop.propValue;
     // }
 
+    const urls = [];
+    const files = req.files;
+    for (const file of files) {
+        const path = file.path;
+        const newPath = await cloudinary.uploader.upload(path);
+        const newUrl = newPath.secure_url ;
+        console.log("🚀 ~ file: products.js ~ line 185 ~ createProduct ~ newUrl", newUrl)
+        
+        urls.push(newUrl);
+        req.body.productImage=urls
+        //fs.unlinkSync(path);
+    }
+
     Product
-        .update({ _id: productId }, { $set: req.body })
+        .updateMany({ _id: productId }, { $set: req.body })
         .exec()
         .then(result => {
             res.status(200).json({
@@ -164,7 +177,7 @@ exports.updateOneProduct = (req, res, next) => {
         .catch(error => {
             next(error);
         })
-};
+});
 
 exports.deleteOneProduct = (req, res, next) => {
     const productId = req.params.productId;

@@ -5,9 +5,7 @@ const multer = require('multer');
 const auths = require('../middleware/check-auth');
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'uploads/');
-    },
+  
     filename: function(req, file, cb) {
         cb(null, file.originalname);
     }
@@ -41,7 +39,7 @@ router.post('/', auths.adminAuth,upload.array('productImage'), ProductsControlle
 
 router.get('/:productId', ProductsController.getOneProduct);
 
-router.patch('/:productId', auths.adminAuth, ProductsController.updateOneProduct);
+router.patch('/:productId', auths.adminAuth,upload.array('productImage'), ProductsController.updateOneProduct);
 
 router.delete('/:productId', auths.adminAuth, ProductsController.deleteOneProduct);
 
