@@ -291,7 +291,8 @@ exports.callback =catchAsync( async(req, res, next) => {
            console.log("🚀 ~ file: orders.js ~ line 290 ~ exports.callback=catchAsync ~ hmac", req.query.hmac)
        if(hash===req.req.query.hmac||!req.query.success)
        {
-        return res.status(400).send({err:"error happend "})
+        return res.redirect(301,`https://www.pure-eg.com/cart/paymenterror`);
+
        }
 
       //** ////////////////////////
@@ -313,7 +314,7 @@ exports.callback =catchAsync( async(req, res, next) => {
         await Product.updateOne({_id:element.id},{$inc:{count:element.count}})
         
      }
-     res.redirect(301,`http://localhost:3000/`);
+     res.redirect(301,`https://www.pure-eg.com/cart/paymentsuccesful`);
     }catch (err){
      res.send({err})
     }

@@ -69,6 +69,7 @@ exports.getProfile = (req, res, next) => {
                 error.message = 'Auth Failed!';
                 throw error;
             }
+        
             return user;
         })
         .then(user => {
