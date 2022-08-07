@@ -297,7 +297,7 @@ exports.callback =catchAsync( async(req, res, next) => {
            const hash=sha512.hmac('46BFB61197F430B1FBEF7C5DACB48C98', HMACConcatenatedString);
            console.log("🚀 ~ file: orders.js ~ line 290 ~ exports.callback=catchAsync ~ hash", hash)
            console.log("🚀 ~ file: orders.js ~ line 290 ~ exports.callback=catchAsync ~ hmac", req.query.hmac)
-       if(hash===req.req.query.hmac||!req.query.success)
+       if(hash===req.query.hmac||!req.query.success)
        {
         return res.redirect(301,`https://www.pure-eg.com/cart/paymenterror`);
 
