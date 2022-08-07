@@ -260,7 +260,6 @@ exports.pay = catchAsync(async (req, res2, next) => {
    
                   let PreOrder =new preOrder({
                         product:{id:req.body.products.id,count:req.body.products.count},
-                        user: req.body.userData.userId,
                         totalAmount:req.body.totalAmount,
                         orderNumber:orderNumber,
                         firstName:req.body.Name,
