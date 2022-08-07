@@ -199,6 +199,14 @@ exports.pay = catchAsync(async (req, res2, next) => {
                 description: 'gg',
                 quantity: 2
               }];
+              const items2=req.body.products.map((p)=>{
+                return({
+                    name: p.name,
+                amount_cents: p.price*100,
+                description: 'gg',
+                quantity: p.count
+                })
+              })
               
                /*  Data.map((p) => {  
                 const I = 
@@ -251,11 +259,11 @@ exports.pay = catchAsync(async (req, res2, next) => {
                     
    
                   let PreOrder =new preOrder({
-                        product:req.body.products,
+                        product:{id:req.body.products.id,count:req.body.products.count},
                         user: req.body.userData.userId,
                         totalAmount:req.body.totalAmount,
                         orderNumber:orderNumber,
-                        firstName:req.body.fristName,
+                        firstName:req.body.Name,
                         address:req.body.address
                     });
                     const preorder= await PreOrder.save() 
@@ -284,7 +292,7 @@ exports.callback =catchAsync( async(req, res, next) => {
       //** ///////////////////////
       let HMACConcatenatedString=req.query.amount_cents.toString()+req.query.created_at.toString()+req.query.currency.toString()+req.query.error_occured.toString()+req.query.has_parent_transaction.toString()+req.query.id.toString()+req.query.integration_id.toString()+req.query.is_3d_secure.toString()+req.query.is_auth.toString()+req.query.is_capture.toString()+req.query.is_refunded.toString()+req.query.is_standalone_payment.toString()+req.query.is_voided.toString()+req.query.order.toString()+req.query.owner.toString()+req.query.pending.toString()+req.query['source_data.pan'].toString()+req.query['source_data.sub_type'].toString()+req.query['source_data.type'].toString()+req.query.success.toString()
       console.log("🚀 ~ file: orders.js ~ line 285 ~ exports.callback=catchAsync ~ HMACConcatenatedString",HMACConcatenatedString)
-//console.log(req.query['source_data.pan'
+      //console.log(req.query['source_data.pan'
 
            const hash=sha512.hmac('46BFB61197F430B1FBEF7C5DACB48C98', HMACConcatenatedString);
            console.log("🚀 ~ file: orders.js ~ line 290 ~ exports.callback=catchAsync ~ hash", hash)
