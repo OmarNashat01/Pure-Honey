@@ -307,15 +307,21 @@ exports.callback =catchAsync( async(req, res, next) => {
         console.log("🚀 ~ file: orders.js ~ line 202 ~ res.body", req.query.order)
         const preorder=await preOrder.findOne({orderNumber:req.query.order})
         console.log("🚀 ~ file: orders.js ~ line 290 ~ exports.callback=catchAsync ~ preorder", preorder)
-     
+        if(!preorder)
+        {
+         return res.redirect(301,`https://www.pure-eg.com/cart/paymenterror`);
+ 
+        }
       await Order.create({
          user:preorder.user,
          product:preorder.product,
          firstName:preorder.firstName,
          address:preorder.address,
+         phone:preOrder.phone,
          orderNumber:preorder.orderNumber,
          totalAmount:preorder.totalAmount
      }) 
+
 
      for (let index = 0; index < preorder.product.length; index++) {
         const element = preorder.product[index];
@@ -324,7 +330,7 @@ exports.callback =catchAsync( async(req, res, next) => {
      }
      res.redirect(301,`https://www.pure-eg.com/cart/paymentsuccesful`);
     }catch (err){
-     res.send({err})
+     res.send({error:err.toString()})
     }
 });
 
