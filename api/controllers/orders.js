@@ -137,7 +137,7 @@ exports.pay = catchAsync(async (req, res2, next) => {
 
     let totalAmount = req.body.totalAmount;
 
-      let firstName = req.body.firstName
+      let firstName = req.body.Name
     let address = req.body.address;
    
 
@@ -256,14 +256,15 @@ exports.pay = catchAsync(async (req, res2, next) => {
                     console.log("here")
                      axios.post('https://accept.paymob.com/api/acceptance/payment_keys', keyData).then(async(res5)=> {
                           console.log(res5.data)
-                    
-   
+                
+                    console.log("req.body",req.body)
                   let PreOrder =new preOrder({
-                        product:{id:req.body.products.id,count:req.body.products.count},
+                        product:req.body.products,
                         totalAmount:req.body.totalAmount,
                         orderNumber:orderNumber,
                         firstName:req.body.Name,
-                        address:req.body.address
+                        address:req.body.address,
+                        phone:req.body.phone
                     });
                     const preorder= await PreOrder.save() 
                     return res2.send({token:res5.data.token})

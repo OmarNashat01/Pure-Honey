@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 
 const preorderSchema = mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     product: [{id:{ type: mongoose.Schema.Types.ObjectId, required: true },count:{type:Number}}],
     firstName: { type: String, require: true },
     address: { type: String, require: true },
     totalQuantity: { type: Number, default: 1 },
     paymentMethod: { type: String, default: "COD" },
     orderNumber:{type: Number},
+    phone:{type:String}, 
     totalAmount:{ type: Number,required: true}
 }, { timestamps: { createdAt: 'created_at' } });
 
