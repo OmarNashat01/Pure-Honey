@@ -81,6 +81,30 @@ exports.getProfile = (req, res, next) => {
             next(error);
         });
 };
+exports.getuser = (req, res, next) => {
+
+    User
+        .findOne({ _id: req.params.userId })
+        .select('_id address userType name phone')
+        .exec()
+        .then(user => {
+            if (user.length < 1) {
+                const error = new Error();
+                error.message = 'Auth Failed!';
+                throw error;
+            }
+        
+            return user;
+        })
+        .then(user => {
+            if (user) {
+                return res.json({ user })
+            }
+        })
+        .catch(error => {
+            next(error);
+        });
+};
 exports.getAll = (req, res, next) => {
 
     User.find()

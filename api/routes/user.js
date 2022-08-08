@@ -13,6 +13,7 @@ router.get('/is-phone', UserController.isPhone);
 router.get('/is-admin', checkAuths.userAuth, UserController.isAdmin);
 
 router.delete('/:userId', checkAuths.adminAuth, UserController.deleteUser)
+router.get('/:userId', checkAuths.adminAuth, UserController.getuser)
 router.patch('', checkAuths.userAuth, UserController.updateuser)
 router.get('', checkAuths.adminAuth, UserController.getAll)
 router.get('/me', checkAuths.userAuth, UserController.getProfile)
