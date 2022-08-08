@@ -317,7 +317,7 @@ exports.callback =catchAsync( async(req, res, next) => {
          product:preorder.product,
          firstName:preorder.firstName,
          address:preorder.address,
-         phone:preOrder.phone,
+         phone:preorder.phone,
          orderNumber:preorder.orderNumber,
          totalAmount:preorder.totalAmount
      }) 
