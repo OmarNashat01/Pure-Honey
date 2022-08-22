@@ -7,7 +7,7 @@ const preorderSchema = mongoose.Schema({
     address: { type: String, require: true },
     totalQuantity: { type: Number, default: 1 },
     paymentMethod: { type: String, default: "COD" },
-    orderNumber:{type: Number},
+    orderNumber:{type: String},
     phone:{type:String}, 
     totalAmount:{ type: Number,required: true}
 }, { timestamps: { createdAt: 'created_at' } });

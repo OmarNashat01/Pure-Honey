@@ -8,6 +8,8 @@ router.get('/', auth.userAuth, OrdersController.getAllOrders);
 router.post('/', auth.userAuth, OrdersController.saveOrders);
 router.post('/pay'/* , auth.userAuth */, OrdersController.pay  );
 router.post('/c'/* , auth.userAuth */, OrdersController.pay  );
+router.post('/orderNoPay'/* , auth.userAuth */, OrdersController.orderNoPay  );
+
 
 router.post('/p'/* , auth.userAuth , */,OrdersController.pay );
 router.get('/callback'/* , auth.userAuth */, OrdersController.callback);

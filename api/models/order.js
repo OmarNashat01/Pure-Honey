@@ -12,7 +12,9 @@ const orderSchema = mongoose.Schema(
     firstName: { type: String, require: true },
     address: { type: String, require: true },
     paymentMethod: { type: String, default: "COD" },
-    orderNumber: { type: Number },
+    orderNumber: { type: String },
+    payed: { type: Boolean, default: false },
+
     totalAmount: { type: Number, required: true },
     phone: { type: String, require: true },
     status: {
