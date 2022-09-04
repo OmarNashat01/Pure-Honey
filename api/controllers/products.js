@@ -9,7 +9,7 @@ const cloudinary = require('../middleware/cloudinary')
 exports.admingetAllProducts = catchAsync(async (req, res, next) => {
    
     try{
-        let prods = await Product.find({type:req.query.type})
+        let prods = await Product.find({type:req.query.type,outOfStock:false})
      
         console.log(prods);
         res.status(200).send(prods);
@@ -28,7 +28,9 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
         price: {
             "$lte": 9999999999,
             "$gte": 0
-        }
+        },
+        outOfStock:false
+
     }
     if (!isNaN(req.query.max)) {
         filter.price["$lte"] = req.query.max
@@ -182,8 +184,7 @@ exports.updateOneProduct =catchAsync(async (req, res, next) => {
 exports.deleteOneProduct = (req, res, next) => {
     const productId = req.params.productId;
     Product
-        .remove({ _id: productId })
-        .exec()
+        .updateOne({ _id: productId },{$set:{outOfStock:true}})
         .then(result => {
             res.status(200).json({
                 message: 'Deleted Product Successfully!',
