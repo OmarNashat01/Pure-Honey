@@ -193,7 +193,7 @@ exports.pay = catchAsync(async (req, res, next) => {
           "payment_method": "paypal"
       },
       "redirect_urls": {
-          "return_url": "http://localhost:3001/api/orders/callback",
+          "return_url": "https://pure-honey.herokuapp.com/api/orders/callback",
           "cancel_url": "https://www.pure-eg.com/cart/paymenterror",
       },
       "transactions": [{
