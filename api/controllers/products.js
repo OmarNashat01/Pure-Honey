@@ -230,14 +230,14 @@ const createProduct = async (req)=> {
 exports.mostpopularproduct =catchAsync( async(req, res, next) => {
     try{
         
-      const mostpopularproduct=   await Product.find().limit(6).sort({count:-1})
+      const mostpopularproduct=   await Product.find({outOfStock:false}).limit(6).sort({count:-1})
      res.send(mostpopularproduct)
     }catch (err){
 res.send({err})
     }
 })
 
-exports.productCount = () => {
+/* exports.productCount = () => {
     return Product.aggregate(
         [{
             "$count": "productCount"
@@ -245,4 +245,4 @@ exports.productCount = () => {
     ).then(r => {
         return r[0].productCount
     })
-}
+} */
