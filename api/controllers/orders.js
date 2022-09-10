@@ -7,16 +7,21 @@ var sha512 = require("js-sha512");
 var paypal = require("paypal-rest-sdk");
 const { productCount } = require("../controllers/products");
 const axios = require("axios");
-
+ 
+//const { CLIENT_ID, APP_SECRET } = process.env;
+const CLIENT_ID='AUNLkcvNhdPRRYHKStkeulAEX3GQaYxtrsjkSUn8gVJDtwRYTdsJ4np-yMDsV-vTsDvWnQfGR6jkgRCY'
+const APP_SECRET='EFWifg-uOJfHRpNLXgIFNVQgom77ChvbPGUG8S_YUKfLUYe9VuJc2jRCY97TAcYvL2SX0aBBeNieRCbO'
 paypal.configure({
   mode: "sandbox", //sandbox or live
-  client_id:
-    "AUNLkcvNhdPRRYHKStkeulAEX3GQaYxtrsjkSUn8gVJDtwRYTdsJ4np-yMDsV-vTsDvWnQfGR6jkgRCY",
-  client_secret:
-    "EFWifg-uOJfHRpNLXgIFNVQgom77ChvbPGUG8S_YUKfLUYe9VuJc2jRCY97TAcYvL2SX0aBBeNieRCbO",
+  client_id:CLIENT_ID,
+  // "AUNLkcvNhdPRRYHKStkeulAEX3GQaYxtrsjkSUn8gVJDtwRYTdsJ4np-yMDsV-vTsDvWnQfGR6jkgRCY",
+  client_secret:APP_SECRET,
+    //"EFWifg-uOJfHRpNLXgIFNVQgom77ChvbPGUG8S_YUKfLUYe9VuJc2jRCY97TAcYvL2SX0aBBeNieRCbO",
+
 });
 
-exports.getAllOrders = (req, res, next) => {
+exports.getAllOrders = async(req, res, next) => {
+
   if (req.userData.userType == "user") {
     console.log(req.userData);
     Order.find({ user: req.userData.userId })
@@ -188,10 +193,37 @@ exports.pay = catchAsync(async (req, res, next) => {
     });
   let x=1
     var create_payment_json = {
-      "intent": "sale",
+      "intent": "ORDER",
       "payer": {
-          "payment_method": "paypal"
-      },
+    
+          //"payment_method": "CREDIT_CARD"
+          //BANK, CARRIER, ALTERNATE_PAYMENT, PAY_UPON_INVOICE
+      }, 
+      /* "purchase_units": [
+        {
+          "amount": {
+            "currency_code": "USD",
+            "value": "500",
+            "breakdown": {
+              "item_total": {
+                "currency_code": "USD",
+                "value": "500"
+              }
+            }
+          },
+          "items": [
+            {
+              "name": "Name of Item #1 (can be viewed in the upper-right dropdown during payment approval)",
+              "description": "Optional description; item details will also be in the completed paypal.com transaction view",
+              "unit_amount": {
+                "currency_code": "USD",
+                "value": "500"
+              },
+              "quantity": "1"
+            }
+          ]
+        }
+      ], */
       "redirect_urls": {
           "return_url": "https://pure-honey.herokuapp.com/api/orders/callback",
           "cancel_url": "https://www.pure-eg.com/cart/paymenterror",
@@ -392,7 +424,10 @@ exports.updateOneOrder = (req, res, next) => {
     });
 };
 
-exports.deleteOneOrder = (req, res, next) => {
+exports.deleteOneOrder = async(req, res, next) => {
+  const x= await generateAccessToken()
+  console.log("🚀 ~ file: orders.js ~ line 429 ~ exports.deleteOneOrder ~ x", x)
+  
   const orderId = req.params.orderId;
   Order.remove({ _id: orderId })
     .exec()
@@ -560,5 +595,29 @@ async function _summary() {
     },
   };
 }
+
+
+/* async function generateAccessToken() {
+  const auth = Buffer.from(CLIENT_ID + ":" + APP_SECRET).toString("base64")
+  const response = await axios(`https://paypal.com/v1/oauth2/token`, {
+    method: "post",
+    body: "grant_type=client_credentials",
+    headers: {
+      auth
+     // Authorization: `Basic ${auth}`,
+    },
+  });
+  const data = await response.json();
+  return data.access_token;
+}
+generateAccessToken().then((access_token) => {
+  console.log("🚀 ~ file: orders.js ~ line 581 ~ generateAccessToken ~ access_token", access_token)
+return 
+	
+}) */
+
+
+ 
+
 
 

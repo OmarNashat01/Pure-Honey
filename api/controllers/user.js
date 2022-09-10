@@ -28,7 +28,7 @@ exports.isPhone = (req, res, next) => {
 }
 
 exports.signUp = (req, res, next) => {
-    console.log('hrer')
+    
     User
         .find({ phone: req.body.phone })
         .exec()
@@ -133,7 +133,7 @@ exports.updateuser = (req, res, next) => {
 exports.logIn = (req, res, next) => {
    
 
-    res.cookie("userData", "hy");
+
     let phone = undefined,
         userId = undefined;
     userType = undefined;
